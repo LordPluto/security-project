@@ -10,8 +10,6 @@
 
 //imports
 import java.io.*;
-import java.nio.charset.*;
-import java.nio.file.*;
 import java.util.Base64;
 
 public class test {

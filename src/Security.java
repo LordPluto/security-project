@@ -12,7 +12,6 @@
 //imports
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.Arrays;
 import java.util.Random;
 
 import javax.crypto.SecretKeyFactory;

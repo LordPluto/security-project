@@ -3,7 +3,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 /**
- * Main view right now. Name subject to change.
+ * Main view right now. Name subject to change. (This is mostly just for testing will probably integrate with Davids GUI)
  * Holds JFrame info
  *
  */

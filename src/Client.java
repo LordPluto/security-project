@@ -13,5 +13,9 @@ public class Client {
 		
 		CasinoModelClone model = new CasinoModelClone();
 		CasinoView view = new CasinoView(model);
+		
+		model.setModelListener(view);
+		
+		model.setAvailableFunds(1000);
 	}
 }

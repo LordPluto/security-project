@@ -10,7 +10,7 @@ public class CasinoModelClone implements ModelListener {
 	int availableFunds;
 	
 	public void setModelListener(ModelListener view) {
-		this.modelListener = modelListener;
+		this.modelListener = view;
 	}
 
 	@Override

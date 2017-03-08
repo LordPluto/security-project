@@ -7,7 +7,15 @@ import java.io.IOException;
  */
 public class CasinoModel implements ViewListener {
 	
+	String username;
+	int fundsAvailable;
+	
 	ModelListener listener;
+	
+	public CasinoModel(String username) {
+		this.username = username;
+		fundsAvailable = FileAccountRepository.getInstance().getFundsAvailable(username);
+	}
 	
 	public void setModelListener(ModelListener listener) {
 		this.listener = listener;
@@ -22,7 +30,10 @@ public class CasinoModel implements ViewListener {
 	@Override
 	public void login(CasinoViewProxy proxy, String username, String password)
 			throws IOException {
-		// TODO Auto-generated method stub
+		
+			setModelListener(proxy);
+			proxy.loginSuccessfulForAccount(username);
+			proxy.setAvailableFunds(fundsAvailable);
 		
 	}
 	

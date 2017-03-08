@@ -1,3 +1,6 @@
+import java.awt.Dimension;
+import java.io.IOException;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -14,21 +17,36 @@ public class CasinoView implements ModelListener{
 	JTextField name;
 	JTextField funds;
 	JPanel panel;
+	ViewListener listener;
 	
 	public CasinoView (ModelListener model) {
 		modelClone = model;
 		frame = new JFrame("Casino Royal");
 		frame.setVisible(true);
+		Dimension dim = new Dimension (200, 200);
+		frame.setMinimumSize (dim);
+		frame.setPreferredSize (dim);
 		name = new JTextField();
 		funds = new JTextField();
 		frame.getContentPane().add(name);
 		frame.getContentPane().add(funds);
 	}
-
-	@Override
-	public void quit() {
-		// TODO Auto-generated method stub
-		
+	
+	/**
+	 * Set what object is listening to this view. (The proxy)
+	 * @param listener
+	 */
+	public void setViewListener(ViewListener listener) {
+		this.listener = listener;
+	}
+	
+	/**
+	 * Test function for logging in over the network. 
+	 * TODO: Rework in new UI with events
+	 * @throws IOException 
+	 */
+	public void doLogin() throws IOException {
+		listener.login(null, "testUser", "testPass");
 	}
 
 	@Override

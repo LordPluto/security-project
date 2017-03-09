@@ -19,7 +19,9 @@ public class Client {
 		int hostPort = 5009;
 		
 		CasinoModelClone model = new CasinoModelClone();
-		CasinoView view = new CasinoView(model);
+		//CasinoView view = new CasinoView(model);
+		Log view = new Log(model);
+		
 		Socket socket = new Socket();
 		socket.connect(new InetSocketAddress("localhost", hostPort));
 		//socket.setTcpNoDelay(true);
@@ -28,8 +30,7 @@ public class Client {
 		view.setViewListener(proxy);
 		model.setModelListener(view);
 		
-		//test login
-		view.doLogin();
+		
 		
 		//socket.close();
 	}

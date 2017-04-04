@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 
-public class Log extends JFrame implements ModelListener {
+public class CasinoLoginView extends JFrame implements ModelListener {
 	
 	private ViewListener listener;
 	private ModelListener model;
@@ -18,7 +18,7 @@ public class Log extends JFrame implements ModelListener {
 	JTextField txuser = new JTextField(15);
 	JPasswordField pass = new JPasswordField(15);
 	
-	Log(ModelListener modelClone){
+	CasinoLoginView(ModelListener modelClone){
 		super("Login Autentification");
 		model = modelClone;
 		setSize(300,200);
@@ -75,8 +75,8 @@ public class Log extends JFrame implements ModelListener {
 
 	@Override
 	public void loginSuccessfulForAccount(String name) throws IOException {
-		newframe regFace =new newframe();
-		regFace.setVisible(true);
+		CasinoMainMenuView.createAndShowGUI();
+
 		dispose();
 		
 	}

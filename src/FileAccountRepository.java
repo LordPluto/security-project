@@ -21,7 +21,7 @@ public class FileAccountRepository implements IAccountRepository {
 
 
 	@Override
-	public void addAccount(String username, String hash) {
+	public void addAccount(String username, String hash, int balance) {
 		// TODO Auto-generated method stub
 		
 	}

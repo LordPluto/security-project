@@ -21,7 +21,7 @@ public interface IAccountRepository {
 	 * @param username
 	 * @param hash
 	 */
-	public void addAccount(String username, String hash);
+	public void addAccount(String username, String hash, int balance);
 	
 	/**
 	 * Get the available balance for the user.

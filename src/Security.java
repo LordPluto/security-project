@@ -60,7 +60,7 @@ public class Security {
 		PBEKeySpec spec = new PBEKeySpec(passChar, getSalt(password.hashCode()), hash_iterations, key_length);
 		password = "";
 		try {
-			SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+			SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
 			return skf.generateSecret(spec).getEncoded();
 		} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
 			throw new AssertionError("Error while hashing password: " + e.getMessage(), e);

@@ -7,9 +7,9 @@ import java.net.Socket;
  * @author ElliotAllen
  *
  */
-public class CasinoViewProxy implements ModelListener {
+public class CasinoViewProxy implements CasinoModelListener {
 	
-	ViewListener listener;
+	CasinoViewListener listener;
 	Socket socket;
 	DataOutputStream out;
 	DataInputStream in;
@@ -45,7 +45,7 @@ public class CasinoViewProxy implements ModelListener {
 		out.flush();
 	}
 
-	public void setViewListener(ViewListener listener) {
+	public void setViewListener(CasinoViewListener listener) {
 		if (this.listener == null) {
 			this.listener = listener;
 			new ReaderThread() .start();

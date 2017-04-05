@@ -2,7 +2,7 @@ import java.io.IOException;
 import java.util.Base64;
 
 
-public class CasinoSessionManager implements ViewListener {
+public class CasinoSessionManager implements CasinoViewListener {
 
 	@Override
 	public void quit() throws IOException {}

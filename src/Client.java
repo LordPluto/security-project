@@ -27,7 +27,7 @@ public class Client {
 		
 		CasinoModelClone model = new CasinoModelClone();
 		//CasinoView view = new CasinoView(model);
-		Log view = new Log(model);
+		CasinoLoginView view = new CasinoLoginView(model);
 		
 		SSLSocket socket = (SSLSocket) SSLSocketFactory.getDefault().createSocket("localhost", hostPort);
 

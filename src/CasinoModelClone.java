@@ -5,13 +5,23 @@ import java.io.IOException;
  * @author ElliotAllen
  *
  */
-public class CasinoModelClone implements ModelListener {
+public class CasinoModelClone implements CasinoModelListener {
 	
-	ModelListener modelListener;
+	CasinoModelListener modelListener;
 	String loggedInUser;
 	int availableFunds;
 	
-	public void setModelListener(ModelListener view) {
+	public String getLoggedInUser() {
+		return loggedInUser;
+	}
+
+
+	public int getAvailableFunds() {
+		return availableFunds;
+	}
+
+
+	public void setModelListener(CasinoModelListener view) {
 		this.modelListener = view;
 	}
 

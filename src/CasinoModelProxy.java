@@ -3,9 +3,9 @@ import java.net.Socket;
 
 
 
-public class CasinoModelProxy implements ViewListener {
+public class CasinoModelProxy implements CasinoViewListener {
 	
-	private ModelListener listener;
+	private CasinoModelListener listener;
 	private Socket socket;
 	private DataOutputStream out;
 	private DataInputStream in;
@@ -22,7 +22,7 @@ public class CasinoModelProxy implements ViewListener {
 		
 	}
 	
-	public void setModelListener(ModelListener view) {
+	public void setModelListener(CasinoModelListener view) {
 		if (this.listener == null) {
 			this.listener = view;
 			new ReaderThread() .start();

@@ -6,7 +6,7 @@ import java.io.IOException;
  * @author Elliot Allen - epa4566
  *
  */
-public interface ModelListener {
+public interface CasinoModelListener {
 	
 	//TODO: Refine protocol. Make sure its secure etc.
 	

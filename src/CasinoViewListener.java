@@ -5,7 +5,7 @@ import java.io.IOException;
  * @author Group 5
  *
  */
-public interface ViewListener {
+public interface CasinoViewListener {
 
 	//TODO: Create Protocol
 	/**

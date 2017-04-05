@@ -59,7 +59,7 @@ public class Log extends JFrame implements ModelListener {
 	}
 
 	@Override
-	public void setAvailableFunds(int funds) throws IOException {
+	public void setAvailableFunds(double funds) throws IOException {
 		// TODO Auto-generated method stub
 		
 	}

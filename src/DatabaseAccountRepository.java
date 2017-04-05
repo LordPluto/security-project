@@ -1,9 +1,8 @@
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Hashtable;
 
-public class DatabaseAccountRepository /*implements IAccountRepository*/ {
+public class DatabaseAccountRepository implements IAccountRepository {
 	
 	private static String URL = "jdbc:mysql://";
 	private static String Port = "3306";
@@ -13,15 +12,15 @@ public class DatabaseAccountRepository /*implements IAccountRepository*/ {
 	private static String Password = "swordfish";
 	private static String Host = "127.0.0.1";
 	
-	private static Hashtable<String,PreparedStatement> pstatements = new Hashtable<String,PreparedStatement>();
+	private Hashtable<String,PreparedStatement> pstatements = new Hashtable<String,PreparedStatement>();
 	private static int UserId = -1;
 	
 	private static Connection conn;
 	
 	private static DatabaseAccountRepository instance;
 	
-	//@Override
-	public synchronized static String getPasswordHash(String username) {
+	@Override
+	public synchronized String getPasswordHash(String username) {
 		String retVal = "";
 		if(!connect()) {
 			return retVal;
@@ -53,7 +52,7 @@ public class DatabaseAccountRepository /*implements IAccountRepository*/ {
 		return instance;
 	}
 	
-	private static PreparedStatement prepare(String query, ArrayList<String> params) {
+	private PreparedStatement prepare(String query, ArrayList<String> params) {
 		try {
 			PreparedStatement pt;
 			if(pstatements.containsKey(query)) {
@@ -72,7 +71,7 @@ public class DatabaseAccountRepository /*implements IAccountRepository*/ {
 		}
 	}
 
-	private static boolean setData(String query, ArrayList<String> params) {
+	private boolean setData(String query, ArrayList<String> params) {
 		try {
 			PreparedStatement ps = prepare(query, params);
 			ps.executeUpdate();
@@ -88,7 +87,7 @@ public class DatabaseAccountRepository /*implements IAccountRepository*/ {
 		}
 	}
 	
-	private static ArrayList<ArrayList<String>> getData(String query, ArrayList<String> params) {
+	private ArrayList<ArrayList<String>> getData(String query, ArrayList<String> params) {
 		try {
 			PreparedStatement ps = prepare(query, params);
 			ResultSet rs = ps.executeQuery();
@@ -116,7 +115,7 @@ public class DatabaseAccountRepository /*implements IAccountRepository*/ {
 		}
 	}
 	
-	private static boolean startTrans() {
+	private boolean startTrans() {
 		try {
 			conn.setAutoCommit(false);
 			return true;
@@ -126,7 +125,7 @@ public class DatabaseAccountRepository /*implements IAccountRepository*/ {
 		}
 	}
 	
-	private static boolean endTrans() {
+	private boolean endTrans() {
 		try {
 			conn.commit();conn.setAutoCommit(true);
 			return true;
@@ -136,7 +135,7 @@ public class DatabaseAccountRepository /*implements IAccountRepository*/ {
 		}
 	}
 	
-	private static boolean rollbackTrans() {
+	private boolean rollbackTrans() {
 		try {
 			conn.rollback();
 			return true;
@@ -146,8 +145,8 @@ public class DatabaseAccountRepository /*implements IAccountRepository*/ {
 		}
 	}
 
-	//@Override
-	public synchronized static void addAccount(String username, String hash, int balance) {
+	@Override
+	public synchronized void addAccount(String username, String hash, int balance) {
 		if(!connect()) {
 			return;
 		}
@@ -188,9 +187,9 @@ public class DatabaseAccountRepository /*implements IAccountRepository*/ {
 		while(!close()) {}
 	}
 	
-	public synchronized static int getFundsAvailable(String username) {
-		//TODO: Implements
-		int balance = -1;
+	@Override
+	public synchronized double getFundsAvailable(String username) {
+		double balance = -1;
 		
 		if(!connect()) {
 			return balance;
@@ -203,8 +202,9 @@ public class DatabaseAccountRepository /*implements IAccountRepository*/ {
 			
 			startTrans();
 			ArrayList<ArrayList<String>> results = getData(query, queryParams);
+			endTrans();
 			
-			balance = Integer.parseInt(results.get(1).get(0));
+			balance = Double.parseDouble(results.get(1).get(0));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -214,7 +214,53 @@ public class DatabaseAccountRepository /*implements IAccountRepository*/ {
 		return balance;
 	}
 	
-	public static boolean connect() {
+	@Override
+	public synchronized void modifyFundsAvailable(String username, double amount) {
+		if(!connect()) {
+			return;
+		}
+		
+		try {
+			String query = "UPDATE UserFund join UserPass on UserPass.id = UserFund.client_id set balance = balance + ? WHERE username = ?;";
+			ArrayList<String> queryParams = new ArrayList<String>();
+			queryParams.add(""+amount);
+			queryParams.add(username);
+			
+			startTrans();
+			setData(query, queryParams);
+			UserId = -1;
+			endTrans();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		while(!close()) {}
+	}
+	
+	@Override
+	public synchronized void setFundsAvailable(String username, double balance) {
+		if(!connect()) {
+			return;
+		}
+		
+		try {
+			String query = "UPDATE UserFund join UserPass on UserPass.id = UserFund.client_id set balance = ? WHERE username = ?;";
+			ArrayList<String> queryParams = new ArrayList<String>();
+			queryParams.add(""+balance);
+			queryParams.add(username);
+			
+			startTrans();
+			setData(query, queryParams);
+			UserId = -1;
+			endTrans();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		while(!close()) {}
+	}
+	
+	private boolean connect() {
 		try{
 			Class.forName(Driver).newInstance();
 			conn = DriverManager.getConnection(URL+Host+":"+Port+"/"+DBName, Username, Password);
@@ -226,53 +272,13 @@ public class DatabaseAccountRepository /*implements IAccountRepository*/ {
 		}
 	}
 	
-	public static boolean close() {
+	private boolean close() {
 		try {
 			conn.close();
 			return true;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		}
-	}
-	
-	public static void main(String[] args) {
-		/*addAccount("shannon_weir",
-				Base64.getEncoder().encodeToString(Security.hash("swordfish")),
-				400);*/
-		
-		//System.out.println(Security.verifyPassword("swordfish", Base64.getDecoder().decode(getPasswordHash("shannon_weir"))));
-		System.out.println(getFundsAvailable("shannon_weir"));
-		/*
-		
-		if(!connect()) {
-			return;
-		}
-		
-		try {
-			String query = "SELECT * FROM UserPass WHERE username='test2';";
-			Statement st = conn.createStatement();
-			ResultSet rs = st.executeQuery(query);
-			
-			ArrayList<ArrayList<String>> results = new ArrayList<ArrayList<String>>();
-			
-			int row=0;
-			while(rs.next()) {
-				ResultSetMetaData rsmd = rs.getMetaData();
-				int numCols = rsmd.getColumnCount();
-				ArrayList<String> tempArray = new ArrayList<String>();
-				for(int i = 1;i<=numCols;++i) {
-					tempArray.add(rs.getString(i));
-				}
-				System.out.println(tempArray.toString());
-				row++;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		while(!close()) {}
-		*/
 	}
 }

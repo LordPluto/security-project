@@ -10,9 +10,8 @@ public class CasinoSessionManager implements ViewListener {
 	@Override
 	public synchronized void login(CasinoViewProxy proxy, String username, String password) throws IOException {
 		//TODO: Authentication
-		IAccountRepository repo = FileAccountRepository.getInstance();
-		//Boolean passedAuth = Security.verifyPassword(password, Base64.getDecoder().decode(repo.getPasswordHash(username)));
-		Boolean passedAuth = true;//test
+		IAccountRepository repo = DatabaseAccountRepository.getInstance();
+		Boolean passedAuth = Security.verifyPassword(password, Base64.getDecoder().decode(repo.getPasswordHash(username)));
 		if (passedAuth) {
 			//New Model and sh*t
 			System.out.printf("LOG: %s passed authentication.\n", username);

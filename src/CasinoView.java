@@ -50,7 +50,7 @@ public class CasinoView implements ModelListener{
 	}
 
 	@Override
-	public void setAvailableFunds(int funds) {
+	public void setAvailableFunds(double funds) {
 		this.funds.setText(funds + "");
 		frame.repaint();
 		

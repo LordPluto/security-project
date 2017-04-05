@@ -28,5 +28,19 @@ public interface IAccountRepository {
 	 * @param username
 	 * @return
 	 */
-	public int getFundsAvailable(String username);
+	public double getFundsAvailable(String username);
+	
+	/**
+	 * Add or subtract from the user's balance
+	 * @param username
+	 * @param amount
+	 */
+	public void modifyFundsAvailable(String username, double amount);
+	
+	/**
+	 * Set the available balance for the user.
+	 * @param username
+	 * @param balance
+	 */
+	public void setFundsAvailable(String username, double balance);
 }

@@ -8,13 +8,13 @@ import java.io.IOException;
 public class CasinoModel implements ViewListener {
 	
 	String username;
-	int fundsAvailable;
+	double fundsAvailable;
 	
 	ModelListener listener;
 	
 	public CasinoModel(String username) {
 		this.username = username;
-		fundsAvailable = FileAccountRepository.getInstance().getFundsAvailable(username);
+		fundsAvailable = DatabaseAccountRepository.getInstance().getFundsAvailable(username);
 	}
 	
 	public void setModelListener(ModelListener listener) {

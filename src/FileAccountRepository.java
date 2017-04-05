@@ -26,9 +26,21 @@ public class FileAccountRepository implements IAccountRepository {
 		
 	}
 	
-	public int getFundsAvailable(String username) {
+	@Override
+	public double getFundsAvailable(String username) {
 		//TODO: Implements
 		return 1337;
 	}
 
+	@Override
+	public void modifyFundsAvailable(String username, double amount) {
+		//TODO: Implement
+		
+	}
+	
+	@Override
+	public void setFundsAvailable(String username, double balance) {
+		//TODO: Implement
+		
+	}
 }

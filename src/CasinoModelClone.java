@@ -11,6 +11,16 @@ public class CasinoModelClone implements ModelListener {
 	String loggedInUser;
 	int availableFunds;
 	
+	public String getLoggedInUser() {
+		return loggedInUser;
+	}
+
+
+	public int getAvailableFunds() {
+		return availableFunds;
+	}
+
+
 	public void setModelListener(ModelListener view) {
 		this.modelListener = view;
 	}

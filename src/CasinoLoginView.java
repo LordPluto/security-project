@@ -7,18 +7,19 @@ import java.io.IOException;
 public class CasinoLoginView extends JFrame implements ModelListener {
 	
 	private ViewListener listener;
-	private ModelListener model;
+	private CasinoModelClone model;
 	public void setViewListener(ViewListener listener) {
 		this.listener = listener;
 	}
 
 	
 	JButton blogin = new JButton("Login");
+	JButton bCreateAccount = new JButton("Create Account");
 	JPanel panel = new JPanel();
 	JTextField txuser = new JTextField(15);
 	JPasswordField pass = new JPasswordField(15);
 	
-	CasinoLoginView(ModelListener modelClone){
+	CasinoLoginView(CasinoModelClone modelClone){
 		super("Login Autentification");
 		model = modelClone;
 		setSize(300,200);
@@ -60,8 +61,7 @@ public class CasinoLoginView extends JFrame implements ModelListener {
 
 	@Override
 	public void setAvailableFunds(int funds) throws IOException {
-		// TODO Auto-generated method stub
-		
+		return;
 	}
 
 	@Override
@@ -75,7 +75,11 @@ public class CasinoLoginView extends JFrame implements ModelListener {
 
 	@Override
 	public void loginSuccessfulForAccount(String name) throws IOException {
-		CasinoMainMenuView.createAndShowGUI();
+		CasinoMainMenuView.createAndShowGUI(model);
+		CasinoMainMenuView.setViewListener(listener);
+		//This is SUCH a hack but the main menu is static stuff right now
+		//TODO: Make this suck less
+		model.setModelListener(new CasinoMainMenuView());  
 
 		dispose();
 		

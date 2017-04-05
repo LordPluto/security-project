@@ -52,12 +52,19 @@ public class DatabaseAccountRepository implements IAccountRepository {
 		return instance;
 	}
 	
+	/**
+	 * Set up the prepared statement to be run.
+	 * @param query
+	 * @param params
+	 * @return
+	 */
 	private PreparedStatement prepare(String query, ArrayList<String> params) {
 		try {
 			PreparedStatement pt;
 			if(pstatements.containsKey(query)) {
 				pt = pstatements.get(query);
 			} else {
+				//Allows for retrieving keys on account generation
 				pt = conn.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
 			}
 			
@@ -71,6 +78,12 @@ public class DatabaseAccountRepository implements IAccountRepository {
 		}
 	}
 
+	/**
+	 * Modifying data in the database
+	 * @param query
+	 * @param params
+	 * @return
+	 */
 	private boolean setData(String query, ArrayList<String> params) {
 		try {
 			PreparedStatement ps = prepare(query, params);
@@ -87,6 +100,12 @@ public class DatabaseAccountRepository implements IAccountRepository {
 		}
 	}
 	
+	/**
+	 * Retrieve data from the database.
+	 * @param query
+	 * @param params
+	 * @return
+	 */
 	private ArrayList<ArrayList<String>> getData(String query, ArrayList<String> params) {
 		try {
 			PreparedStatement ps = prepare(query, params);
@@ -115,6 +134,10 @@ public class DatabaseAccountRepository implements IAccountRepository {
 		}
 	}
 	
+	/**
+	 * Start a SQL command
+	 * @return
+	 */
 	private boolean startTrans() {
 		try {
 			conn.setAutoCommit(false);
@@ -125,6 +148,10 @@ public class DatabaseAccountRepository implements IAccountRepository {
 		}
 	}
 	
+	/**
+	 * End a SQL command
+	 * @return
+	 */
 	private boolean endTrans() {
 		try {
 			conn.commit();conn.setAutoCommit(true);
@@ -135,6 +162,10 @@ public class DatabaseAccountRepository implements IAccountRepository {
 		}
 	}
 	
+	/**
+	 * Undo a SQL command
+	 * @return
+	 */
 	private boolean rollbackTrans() {
 		try {
 			conn.rollback();
@@ -263,7 +294,7 @@ public class DatabaseAccountRepository implements IAccountRepository {
 	private boolean connect() {
 		try{
 			Class.forName(Driver).newInstance();
-			conn = DriverManager.getConnection(URL+Host+":"+Port+"/"+DBName, Username, Password);
+			conn = DriverManager.getConnection(URL+Host+":"+Port+"/"+DBName+"?verifyServerCertificate=false&useSSL=true", Username, Password);
 			return true;
 		} catch(Exception e) {
 			System.err.println("Error while connection to SQL database");

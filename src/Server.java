@@ -29,7 +29,7 @@ public class Server {
 		for (;;) {	
 				Socket socket = serversocket.accept();
 				CasinoViewProxy proxy = new CasinoViewProxy (socket);
-				proxy.setViewListener ((ViewListener)manager);
+				proxy.setViewListener ((CasinoViewListener)manager);
 		}
 		
 	}

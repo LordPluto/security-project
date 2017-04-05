@@ -4,11 +4,11 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 
-public class CasinoLoginView extends JFrame implements ModelListener {
+public class CasinoLoginView extends JFrame implements CasinoModelListener {
 	
-	private ViewListener listener;
+	private CasinoViewListener listener;
 	private CasinoModelClone model;
-	public void setViewListener(ViewListener listener) {
+	public void setViewListener(CasinoViewListener listener) {
 		this.listener = listener;
 	}
 

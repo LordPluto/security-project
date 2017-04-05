@@ -5,19 +5,19 @@ import java.io.IOException;
  * @author ElliotAllen
  *
  */
-public class CasinoModel implements ViewListener {
+public class CasinoModel implements CasinoViewListener {
 	
 	String username;
 	int fundsAvailable;
 	
-	ModelListener listener;
+	CasinoModelListener listener;
 	
 	public CasinoModel(String username) {
 		this.username = username;
 		fundsAvailable = FileAccountRepository.getInstance().getFundsAvailable(username);
 	}
 	
-	public void setModelListener(ModelListener listener) {
+	public void setModelListener(CasinoModelListener listener) {
 		this.listener = listener;
 	}
 

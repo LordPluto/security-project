@@ -6,14 +6,14 @@ import java.io.IOException;
 
 import javax.swing.*;
 
-public class CasinoMainMenuView implements ModelListener {
+public class CasinoMainMenuView implements CasinoModelListener {
     final static boolean shouldFill = true;
     final static boolean shouldWeightX = true;
     final static boolean RIGHT_TO_LEFT = false;
 
     static JFrame frame;
     static CasinoModelClone modelClone;
-    static ViewListener listener;
+    static CasinoViewListener listener;
 	static JButton joinPublicGame = new JButton("Join Public Game");
 	static JButton joinPrivateGame = new JButton("Join Private Game");
 	static JButton newGame = new JButton("Host Game");
@@ -103,7 +103,7 @@ public class CasinoMainMenuView implements ModelListener {
 		}
 	}
 
-	public static void setViewListener(ViewListener theListener) {
+	public static void setViewListener(CasinoViewListener theListener) {
 		listener = theListener;
 	}
     

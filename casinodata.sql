@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS `userfund`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `userfund` (
   `id` int(4) NOT NULL AUTO_INCREMENT,
-  `balance` decimal(7,2) DEFAULT NULL,
+  `balance` decimal(11,2) DEFAULT NULL,
   `client_id` int(4) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `client_id` (`client_id`),

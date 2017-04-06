@@ -17,7 +17,7 @@ public interface CasinoModelListener {
 	 * @param funds - funds available.
 	 * @throws IOException 
 	 */
-	public void setAvailableFunds(int funds) throws IOException;
+	public void setAvailableFunds(double funds) throws IOException;
 	
 	/** 
 	 * The server reports that the login attempt failed.

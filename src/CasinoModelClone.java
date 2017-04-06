@@ -9,7 +9,7 @@ public class CasinoModelClone implements CasinoModelListener {
 	
 	CasinoModelListener modelListener;
 	String loggedInUser;
-	int availableFunds;
+	double availableFunds;
 	
 	public String getLoggedInUser() {
 		return loggedInUser;
@@ -27,7 +27,7 @@ public class CasinoModelClone implements CasinoModelListener {
 
 
 	@Override
-	public void setAvailableFunds(int funds) throws IOException {
+	public void setAvailableFunds(double funds) throws IOException {
 		availableFunds = funds;
 		modelListener.setAvailableFunds(funds);
 	}

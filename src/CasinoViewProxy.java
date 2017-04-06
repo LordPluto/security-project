@@ -21,10 +21,10 @@ public class CasinoViewProxy implements CasinoModelListener {
 	}
 
 	@Override
-	public void setAvailableFunds(int funds) throws IOException {
-		System.out.println("SERVER SET FUNDS: "+funds);
+	public void setAvailableFunds(double fundsAvailable) throws IOException {
+		System.out.println("SERVER SET FUNDS: "+fundsAvailable);
 		out.writeByte('M');
-		out.writeInt(funds);
+		out.writeDouble(fundsAvailable);
 		out.flush();
 		
 	}

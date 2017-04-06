@@ -60,7 +60,7 @@ public class CasinoLoginView extends JFrame implements CasinoModelListener {
 	}
 
 	@Override
-	public void setAvailableFunds(int funds) throws IOException {
+	public void setAvailableFunds(double funds) throws IOException {
 		return;
 	}
 

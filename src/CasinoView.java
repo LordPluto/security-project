@@ -10,16 +10,16 @@ import javax.swing.JTextField;
  * Holds JFrame info
  *
  */
-public class CasinoView implements ModelListener{
+public class CasinoView implements CasinoModelListener{
 	
 	private JFrame frame;
-	ModelListener modelClone;
+	CasinoModelListener modelClone;
 	JTextField name;
 	JTextField funds;
 	JPanel panel;
-	ViewListener listener;
+	CasinoViewListener listener;
 	
-	public CasinoView (ModelListener model) {
+	public CasinoView (CasinoModelListener model) {
 		modelClone = model;
 		frame = new JFrame("Casino Royal");
 		frame.setVisible(true);
@@ -36,7 +36,7 @@ public class CasinoView implements ModelListener{
 	 * Set what object is listening to this view. (The proxy)
 	 * @param listener
 	 */
-	public void setViewListener(ViewListener listener) {
+	public void setViewListener(CasinoViewListener listener) {
 		this.listener = listener;
 	}
 	

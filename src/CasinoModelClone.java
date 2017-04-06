@@ -16,7 +16,7 @@ public class CasinoModelClone implements CasinoModelListener {
 	}
 
 
-	public int getAvailableFunds() {
+	public double getAvailableFunds() {
 		return availableFunds;
 	}
 

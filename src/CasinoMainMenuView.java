@@ -137,7 +137,7 @@ public class CasinoMainMenuView implements CasinoModelListener {
 
 
 	@Override
-	public void setAvailableFunds(int funds) throws IOException {
+	public void setAvailableFunds(double funds) throws IOException {
 		setBalance();
 		balance.repaint();
 	}

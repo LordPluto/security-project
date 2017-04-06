@@ -56,7 +56,7 @@ public class CasinoModelProxy implements CasinoViewListener {
 				System.out.println("Client reader started.");
 				for (;;) {
 					String name;
-					int funds;
+					double funds;
 					byte b = in.readByte();
 					switch (b) {
 						case 'L':
@@ -69,7 +69,7 @@ public class CasinoModelProxy implements CasinoViewListener {
 							listener.loginFailed();
 							break;
 						case 'M':
-							funds = in.readInt();
+							funds = in.readDouble();
 							System.out.println("Client got FUNDS: " + funds);
 							listener.setAvailableFunds(funds);
 							break;

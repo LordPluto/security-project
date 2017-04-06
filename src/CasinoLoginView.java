@@ -3,11 +3,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class CasinoLoginView extends JFrame implements CasinoModelListener {
 	
+	private int loginAttemptsRemaining;
 	private CasinoViewListener listener;
 	private CasinoModelClone model;
+	private Timer waitTimer;
 	public void setViewListener(CasinoViewListener listener) {
 		this.listener = listener;
 	}
@@ -39,6 +43,9 @@ public class CasinoLoginView extends JFrame implements CasinoModelListener {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 		actionlogin();
+		
+		loginAttemptsRemaining = 3;
+		waitTimer = new Timer();
 	}
 	
 	public void actionlogin(){
@@ -66,11 +73,31 @@ public class CasinoLoginView extends JFrame implements CasinoModelListener {
 
 	@Override
 	public void loginFailed() throws IOException {
-		JOptionPane.showMessageDialog(null,"Wrong Password / Username");
 		txuser.setText("");
 		pass.setText("");
-		txuser.requestFocus();
 		
+		--loginAttemptsRemaining;
+		if(loginAttemptsRemaining <= 0) {
+			JOptionPane.showMessageDialog(null,"Wrong Password / Username\nToo many login attempts - timed out for five minutes.");
+			
+			//Need to time out the user for five minutes.
+			blogin.setEnabled(false);
+			final TimerTask r = new TimerTask() {
+				@Override
+				public void run() {
+					loginAttemptsRemaining = 3;
+					blogin.setEnabled(true);
+				}
+			};
+			//Five minute timeout -
+			// 5 minutes = 300 seconds = 300000 milliseconds
+			waitTimer.schedule(r, 300000);
+		}
+		else {
+			JOptionPane.showMessageDialog(null,"Wrong Password / Username");
+		}
+		
+		txuser.requestFocus();
 	}
 
 	@Override

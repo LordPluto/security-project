@@ -1,5 +1,9 @@
+package Proxies;
 import java.io.*;
 import java.net.Socket;
+
+import Listeners.CasinoModelListener;
+import Listeners.CasinoViewListener;
 
 /**
  * Reads data from view off the network. 

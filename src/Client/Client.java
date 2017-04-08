@@ -1,10 +1,12 @@
+package Client;
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.Socket;
-
-import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
+
+import Models.CasinoModelClone;
+import Proxies.CasinoModelProxy;
+import Views.CasinoLoginView;
 
 /**
  * The main executable for the client. 

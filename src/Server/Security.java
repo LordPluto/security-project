@@ -1,3 +1,4 @@
+package Server;
 /**
  * Class for static methods used in account verification.
  * Used to hash passwords and check hashed passwords.

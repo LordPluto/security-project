@@ -1,9 +1,13 @@
+package Views;
 import java.awt.Dimension;
 import java.io.IOException;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import Listeners.CasinoModelListener;
+import Listeners.CasinoViewListener;
 
 /**
  * Main view right now. Name subject to change. (This is mostly just for testing will probably integrate with Davids GUI)

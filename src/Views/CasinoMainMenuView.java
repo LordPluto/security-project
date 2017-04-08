@@ -1,3 +1,4 @@
+package Views;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -5,6 +6,10 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 import javax.swing.*;
+
+import Listeners.CasinoModelListener;
+import Listeners.CasinoViewListener;
+import Models.CasinoModelClone;
 
 public class CasinoMainMenuView implements CasinoModelListener {
     final static boolean shouldFill = true;

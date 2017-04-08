@@ -12,6 +12,8 @@
 import java.io.*;
 import java.util.Base64;
 
+import Server.Security;
+
 public class test {
 	public static void main(String[] args) {
 		testPasswordHashing("abcdefghijkl");

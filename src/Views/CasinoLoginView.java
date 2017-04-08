@@ -1,4 +1,9 @@
+package Views;
 import javax.swing.*;
+
+import Listeners.CasinoModelListener;
+import Listeners.CasinoViewListener;
+import Models.CasinoModelClone;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -23,7 +28,7 @@ public class CasinoLoginView extends JFrame implements CasinoModelListener {
 	JTextField txuser = new JTextField(15);
 	JPasswordField pass = new JPasswordField(15);
 	
-	CasinoLoginView(CasinoModelClone modelClone){
+	public CasinoLoginView(CasinoModelClone modelClone){
 		super("Login Autentification");
 		model = modelClone;
 		setSize(300,200);

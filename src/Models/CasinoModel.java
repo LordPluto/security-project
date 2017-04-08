@@ -1,4 +1,11 @@
+package Models;
+
 import java.io.IOException;
+
+import Database.DatabaseAccountRepository;
+import Listeners.CasinoModelListener;
+import Listeners.CasinoViewListener;
+import Proxies.CasinoViewProxy;
 
 /**
  * Keeps track of the casino model (login/main menu items)

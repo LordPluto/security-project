@@ -1,4 +1,7 @@
+package Listeners;
 import java.io.IOException;
+
+import Proxies.CasinoViewProxy;
 
 /**
  * ViewListener interface receives and passes along messages from the model

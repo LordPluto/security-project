@@ -1,5 +1,12 @@
+package Server;
 import java.io.IOException;
 import java.util.Base64;
+
+import Database.DatabaseAccountRepository;
+import Database.IAccountRepository;
+import Listeners.CasinoViewListener;
+import Models.CasinoModel;
+import Proxies.CasinoViewProxy;
 
 
 public class CasinoSessionManager implements CasinoViewListener {

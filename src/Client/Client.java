@@ -34,7 +34,7 @@ public class Client {
 		SSLSocket socket = (SSLSocket) SSLSocketFactory.getDefault().createSocket("localhost", hostPort);
 
 		CasinoModelProxy proxy = new CasinoModelProxy(socket);
-		proxy.setModelListener(model);
+		proxy.setCasinoModelListener(model);
 		view.setViewListener(proxy);
 		model.setModelListener(view);
 		

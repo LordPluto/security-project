@@ -116,4 +116,10 @@ public class CasinoLoginView extends JFrame implements CasinoModelListener {
 		dispose();
 		
 	}
+
+	@Override
+	public void joinGameFailed(String reason) throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
 }

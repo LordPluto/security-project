@@ -33,7 +33,7 @@ public class Server {
 		for (;;) {	
 				Socket socket = serversocket.accept();
 				CasinoViewProxy proxy = new CasinoViewProxy (socket);
-				proxy.setViewListener ((CasinoViewListener)manager);
+				proxy.setCasinoViewListener ((CasinoViewListener)manager);
 		}
 		
 	}

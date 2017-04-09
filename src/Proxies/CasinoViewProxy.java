@@ -2,8 +2,7 @@ package Proxies;
 import java.io.*;
 import java.net.Socket;
 
-import Listeners.CasinoModelListener;
-import Listeners.CasinoViewListener;
+import Listeners.*;
 
 /**
  * Reads data from view off the network. 
@@ -11,12 +10,14 @@ import Listeners.CasinoViewListener;
  * @author ElliotAllen
  *
  */
-public class CasinoViewProxy implements CasinoModelListener {
+public class CasinoViewProxy implements CasinoModelListener, GameModelListener{
 	
-	CasinoViewListener listener;
+	CasinoViewListener casinoListener;
+	GameViewListener gameListener;
 	Socket socket;
 	DataOutputStream out;
 	DataInputStream in;
+	ReaderThread networkReader;
 
 	public CasinoViewProxy(Socket socket) throws IOException {
 		this.socket = socket;
@@ -36,7 +37,8 @@ public class CasinoViewProxy implements CasinoModelListener {
 	@Override
 	public void loginFailed() throws IOException {
 		System.out.println("SERVER SENT LOGIN FAILED");
-		out.writeByte('F');
+		out.writeByte('E');
+		out.writeInt(ErrorCode.LOGIN_FAILED);
 		out.flush();
 		
 	}
@@ -49,14 +51,37 @@ public class CasinoViewProxy implements CasinoModelListener {
 		out.flush();
 	}
 
-	public void setViewListener(CasinoViewListener listener) {
-		if (this.listener == null) {
-			this.listener = listener;
-			new ReaderThread() .start();
+	public void setCasinoViewListener(CasinoViewListener listener) {
+		if (this.casinoListener == null) {
+			this.casinoListener = listener;
+			if (networkReader == null) {
+				networkReader = new ReaderThread();
+				networkReader.start();
+			}
 		}
 		else {
-			this.listener = listener;
+			this.casinoListener = listener;
 		}
+	}
+	
+	public void setGameViewListener(GameViewListener listener) {
+		if (this.gameListener == null) {
+			this.gameListener = listener;
+			if (networkReader == null) {
+				networkReader = new ReaderThread();
+				networkReader.start();
+			}
+		}
+		else {
+			this.gameListener = listener;
+		}
+	}
+	
+	@Override
+	public void joinGameFailed(String reason) throws IOException {
+		out.writeByte('E');
+		out.writeInt(ErrorCode.JOIN_GAME_FAILED);
+		out.flush();
 	}
 	
 
@@ -67,18 +92,25 @@ public class CasinoViewProxy implements CasinoModelListener {
 			try {
 				for (;;) {
 					String name, password;
+					int sessionID;
+					double funds;
 					byte b = in.readByte();
 					switch (b) {
 						case 'L':
 							name = in.readUTF();
 							password = in.readUTF();
 							System.out.printf("SERVER GOT LOGIN: %s, %s\n", name, password);
-							listener.login(CasinoViewProxy.this, name, password);
+							casinoListener.login(CasinoViewProxy.this, name, password);
 							break;
 						case 'Q':
 							System.out.println("Server got QUIT");
-							listener.quit();
+							casinoListener.quit();
 							break;
+						case 'J':
+							sessionID = in.readInt();
+							funds = in.readDouble();
+							password = in.readUTF();
+							casinoListener.joinGame(sessionID, funds, password);
 						default:
 							System.err.println ("Message not recognized.");
 							break;
@@ -93,5 +125,8 @@ public class CasinoViewProxy implements CasinoModelListener {
 			}
 		}
 	}
+
+
+	
 
 }

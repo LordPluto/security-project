@@ -26,5 +26,10 @@ public interface CasinoViewListener {
 	 */
 	public void login(CasinoViewProxy proxy, String username, String password) throws IOException;
 	
-	
+	/**
+	 * Joins an open public game.
+	 * @param fundsToBring Amount of funds to bring from available funds, usable in game.
+	 * @throws IOException 
+	 */
+	public void joinGame(int sessionID, double fundsToBring, String sessionPassword) throws IOException;
 }

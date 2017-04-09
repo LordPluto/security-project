@@ -158,6 +158,11 @@ public class CasinoMainMenuView implements CasinoModelListener {
 	@Override
 	public void loginSuccessfulForAccount(String name) throws IOException {
 		return;
-		
+	}
+
+
+	@Override
+	public void joinGameFailed(String reason) throws IOException {
+		JOptionPane.showMessageDialog(null, "Unable to join game: " + reason);
 	}
 }

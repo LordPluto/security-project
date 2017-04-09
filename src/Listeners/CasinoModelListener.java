@@ -35,6 +35,12 @@ public interface CasinoModelListener {
 	public void loginSuccessfulForAccount(String name) throws IOException;
 	
 
+	/**
+	 * Reports that the attempt to join a game session failed.
+	 * @param reason - The reason the attempt failed.
+	 * @throws IOException
+	 */
+	public void joinGameFailed(String reason) throws IOException;
 	
 
 }

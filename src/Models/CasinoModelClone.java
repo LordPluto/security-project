@@ -48,6 +48,12 @@ public class CasinoModelClone implements CasinoModelListener {
 		
 	}
 
+
+	@Override
+	public void joinGameFailed(String reason) throws IOException {
+		modelListener.joinGameFailed(reason);
+	}
+
 	
 	
 }

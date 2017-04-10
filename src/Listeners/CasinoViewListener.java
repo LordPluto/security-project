@@ -31,5 +31,5 @@ public interface CasinoViewListener {
 	 * @param fundsToBring Amount of funds to bring from available funds, usable in game.
 	 * @throws IOException 
 	 */
-	public void joinGame(int sessionID, double fundsToBring, String sessionPassword) throws IOException;
+	public void joinGame(int sessionID, double fundsToBring, String sessionPassword, GameModelListener respondTo) throws IOException;
 }

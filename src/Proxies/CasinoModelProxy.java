@@ -3,6 +3,7 @@ import java.io.*;
 import java.net.Socket;
 
 
+
 import Listeners.*;
 
 
@@ -11,6 +12,7 @@ public class CasinoModelProxy implements CasinoViewListener, GameViewListener {
 	
 	private CasinoModelListener casinoListener;
 	private GameModelListener gameListener;
+	private CasinoModelProxy self = this;
 	private Socket socket;
 	private DataOutputStream out;
 	private DataInputStream in;
@@ -71,12 +73,19 @@ public class CasinoModelProxy implements CasinoViewListener, GameViewListener {
 	}
 	
 	@Override
-	public void joinGame(int sessionID, double fundsToBring, String sessionPassword) throws IOException {
-		System.out.println("CLIENT send JOIN "+ sessionID + " with $" + fundsToBring);
+	public void joinGame(int sessionID, double fundsToBring, String sessionPassword, GameModelListener l) throws IOException {
+		System.out.println("CLIENT sent JOIN "+ sessionID + " with $" + fundsToBring);
+		setGameModelListener(l);
 		out.writeByte('J');
 		out.writeInt(sessionID);
 		out.writeDouble(fundsToBring);
 		out.writeUTF(sessionPassword);
+		out.flush();
+	}
+	
+	@Override
+	public void quitGame(CasinoViewProxy client) throws IOException {
+		out.writeByte('E');
 		out.flush();
 	}
 	
@@ -113,8 +122,20 @@ public class CasinoModelProxy implements CasinoViewListener, GameViewListener {
 							System.out.println("Client got FUNDS: " + funds);
 							casinoListener.setAvailableFunds(funds);
 							break;
+						case 'G': //Join game success
+							System.out.println("Client got JOIN SUCCESS");
+							casinoListener.joinGameSuccess(self);
+							break;
+						case 'P':
+							int seat = in.readInt();
+							name = in.readUTF();
+							funds = in.readDouble();
+							System.out.printf("Client got PLAYER in %d, %s\n", seat, name);
+							if (gameListener != null)
+								gameListener.playerUpdate(seat, name, funds);
+							break;
 						default:
-							System.err.println ("Message not recognized.");
+							System.err.println ("Message not recognized." + b);
 							break;
 						}
 					}
@@ -127,6 +148,8 @@ public class CasinoModelProxy implements CasinoViewListener, GameViewListener {
 			}
 		}
 	}
+
+	
 
 	
 

@@ -14,6 +14,7 @@ public class CasinoViewProxy implements CasinoModelListener, GameModelListener{
 	
 	CasinoViewListener casinoListener;
 	GameViewListener gameListener;
+	CasinoViewProxy self = this;
 	Socket socket;
 	DataOutputStream out;
 	DataInputStream in;
@@ -21,12 +22,13 @@ public class CasinoViewProxy implements CasinoModelListener, GameModelListener{
 
 	public CasinoViewProxy(Socket socket) throws IOException {
 		this.socket = socket;
+		System.out.printf("New connection to %s %s\n",socket.getInetAddress().toString(), socket.getPort());
 		out = new DataOutputStream(socket.getOutputStream());
 		in = new DataInputStream(socket.getInputStream());
 	}
 
 	@Override
-	public void setAvailableFunds(double fundsAvailable) throws IOException {
+	public synchronized void setAvailableFunds(double fundsAvailable) throws IOException {
 		System.out.println("SERVER SET FUNDS: "+fundsAvailable);
 		out.writeByte('M');
 		out.writeDouble(fundsAvailable);
@@ -35,7 +37,7 @@ public class CasinoViewProxy implements CasinoModelListener, GameModelListener{
 	}
 
 	@Override
-	public void loginFailed() throws IOException {
+	public synchronized void loginFailed() throws IOException {
 		System.out.println("SERVER SENT LOGIN FAILED");
 		out.writeByte('E');
 		out.writeInt(ErrorCode.LOGIN_FAILED);
@@ -64,7 +66,7 @@ public class CasinoViewProxy implements CasinoModelListener, GameModelListener{
 		}
 	}
 	
-	public void setGameViewListener(GameViewListener listener) {
+	public synchronized void setGameViewListener(GameViewListener listener) {
 		if (this.gameListener == null) {
 			this.gameListener = listener;
 			if (networkReader == null) {
@@ -78,9 +80,25 @@ public class CasinoViewProxy implements CasinoModelListener, GameModelListener{
 	}
 	
 	@Override
-	public void joinGameFailed(String reason) throws IOException {
+	public synchronized void joinGameFailed(String reason) throws IOException {
 		out.writeByte('E');
 		out.writeInt(ErrorCode.JOIN_GAME_FAILED);
+		out.flush();
+	}
+	
+	@Override
+	public synchronized void playerUpdate(int seat, String username, double funds) throws IOException {
+		System.out.printf("Server send PLAYER %s to %s",username, socket.getPort());
+		out.writeByte('P');
+		out.writeInt(seat);
+		out.writeUTF(username);
+		out.writeDouble(funds);
+		out.flush();
+	}
+	
+	@Override
+	public synchronized void joinGameSuccess(CasinoModelProxy session) throws IOException {
+		out.writeByte('G');
 		out.flush();
 	}
 	
@@ -110,9 +128,14 @@ public class CasinoViewProxy implements CasinoModelListener, GameModelListener{
 							sessionID = in.readInt();
 							funds = in.readDouble();
 							password = in.readUTF();
-							casinoListener.joinGame(sessionID, funds, password);
+							casinoListener.joinGame(sessionID, funds, password, self);
+							break;
+						case 'E':
+							//Do we really need to quit here? the finally should get it
+							//Don't want to double call
+							break;
 						default:
-							System.err.println ("Message not recognized.");
+							System.err.println ("Message not recognized. " + b);
 							break;
 						}
 					}
@@ -120,11 +143,20 @@ public class CasinoViewProxy implements CasinoModelListener, GameModelListener{
 			catch (IOException exc){}
 			finally {
 				try {
+					System.out.printf("Closed connection to %s %s\n",socket.getInetAddress().toString(), socket.getPort());
+					casinoListener.quit();
+					if (gameListener != null) gameListener.quitGame(self);
 					socket.close();
 				} catch (IOException exc) {}
 			}
 		}
 	}
+
+
+	
+
+
+	
 
 
 	

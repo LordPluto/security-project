@@ -1,6 +1,8 @@
 package Listeners;
 import java.io.IOException;
 
+import Proxies.CasinoModelProxy;
+
 /**
  * ModelListener interface receives and passes along messages from the model
  * So far this is only for the login/landing pages.
@@ -42,5 +44,11 @@ public interface CasinoModelListener {
 	 */
 	public void joinGameFailed(String reason) throws IOException;
 	
+	/**
+	 * Reports that the attempt to join a game session was successful
+	 * and that the client should setup the client game session
+	 * @throws IOException 
+	 */
+	public void joinGameSuccess(CasinoModelProxy session) throws IOException;
 
 }

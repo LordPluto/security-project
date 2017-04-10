@@ -3,7 +3,9 @@ import javax.swing.*;
 
 import Listeners.CasinoModelListener;
 import Listeners.CasinoViewListener;
+import Listeners.GameViewListener;
 import Models.CasinoModelClone;
+import Proxies.CasinoModelProxy;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -119,6 +121,11 @@ public class CasinoLoginView extends JFrame implements CasinoModelListener {
 
 	@Override
 	public void joinGameFailed(String reason) throws IOException {
+		//Does nothing in login View
+	}
+
+	@Override
+	public void joinGameSuccess(CasinoModelProxy session) throws IOException {
 		// TODO Auto-generated method stub
 		
 	}

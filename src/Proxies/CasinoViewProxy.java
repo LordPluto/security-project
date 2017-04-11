@@ -88,7 +88,7 @@ public class CasinoViewProxy implements CasinoModelListener, GameModelListener{
 	
 	@Override
 	public synchronized void playerUpdate(int seat, String username, double funds) throws IOException {
-		System.out.printf("Server send PLAYER %s to %s",username, socket.getPort());
+		System.out.printf("Server send PLAYER %s to %s\n",username, socket.getPort());
 		out.writeByte('P');
 		out.writeInt(seat);
 		out.writeUTF(username);
@@ -99,6 +99,36 @@ public class CasinoViewProxy implements CasinoModelListener, GameModelListener{
 	@Override
 	public synchronized void joinGameSuccess(CasinoModelProxy session) throws IOException {
 		out.writeByte('G');
+		out.flush();
+	}
+	
+	@Override
+	public void updateBalance(int seat, double amount) throws IOException {
+		System.out.printf("Server send BAL %d to %s\n",seat, socket.getPort());
+		out.writeByte('B');
+		out.writeInt(seat);
+		out.writeDouble(amount);
+		out.flush();
+	}
+
+	@Override
+	public void updateBet(int seat, int prediction, double amount)
+			throws IOException {
+		System.out.printf("Server send BET %d to %s\n",seat, socket.getPort());
+		out.writeByte('b');
+		out.writeInt(seat);
+		out.writeInt(prediction);
+		out.writeDouble(amount);
+		out.flush();
+		
+	}
+
+	@Override
+	public void turnUpdate(int outcome, int time) throws IOException {
+		System.out.printf("Server send TURN %d to %s\n",outcome, socket.getPort());
+		out.writeByte('T');
+		out.writeInt(outcome);
+		out.writeInt(time);
 		out.flush();
 	}
 	
@@ -134,6 +164,11 @@ public class CasinoViewProxy implements CasinoModelListener, GameModelListener{
 							//Do we really need to quit here? the finally should get it
 							//Don't want to double call
 							break;
+						case 'B':
+							int outcome = in.readInt();
+							funds = in.readDouble();
+							if (gameListener != null) gameListener.bet(self,outcome,funds);
+							break;
 						default:
 							System.err.println ("Message not recognized. " + b);
 							break;
@@ -151,6 +186,9 @@ public class CasinoViewProxy implements CasinoModelListener, GameModelListener{
 			}
 		}
 	}
+
+
+	
 
 
 	

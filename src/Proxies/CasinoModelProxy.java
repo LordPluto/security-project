@@ -4,6 +4,8 @@ import java.net.Socket;
 
 
 
+
+
 import Listeners.*;
 
 
@@ -89,6 +91,14 @@ public class CasinoModelProxy implements CasinoViewListener, GameViewListener {
 		out.flush();
 	}
 	
+	@Override
+	public void bet(GameModelListener client, int outcome, double amount) throws IOException {
+		out.writeByte('B');
+		out.writeInt(outcome);
+		out.writeDouble(amount);
+		out.flush();
+	}
+	
 	private class ReaderThread
 	extends Thread
 	{
@@ -97,6 +107,7 @@ public class CasinoModelProxy implements CasinoViewListener, GameViewListener {
 				System.out.println("Client reader started.");
 				for (;;) {
 					String name;
+					int seat;
 					double funds;
 					byte b = in.readByte();
 					switch (b) {
@@ -127,12 +138,32 @@ public class CasinoModelProxy implements CasinoViewListener, GameViewListener {
 							casinoListener.joinGameSuccess(self);
 							break;
 						case 'P':
-							int seat = in.readInt();
+							 seat = in.readInt();
 							name = in.readUTF();
 							funds = in.readDouble();
 							System.out.printf("Client got PLAYER in %d, %s\n", seat, name);
 							if (gameListener != null)
 								gameListener.playerUpdate(seat, name, funds);
+							break;
+						case 'B':
+							seat = in.readInt();
+							funds = in.readDouble();
+							if (gameListener != null)
+								gameListener.updateBalance(seat, funds);
+							break;
+						case 'b':
+							seat = in.readInt();
+							int prediction = in.readInt();
+							funds = in.readDouble();
+							if (gameListener != null)
+								gameListener.updateBet(seat, prediction, funds);
+							break;
+						case 'T':
+							int outcome = in.readInt();
+							int time = in.readInt();
+							System.out.printf("Client got TURN with %d %d\n",outcome, time);
+							if (gameListener != null)
+								gameListener.turnUpdate(outcome, time);
 							break;
 						default:
 							System.err.println ("Message not recognized." + b);
@@ -140,14 +171,17 @@ public class CasinoModelProxy implements CasinoViewListener, GameViewListener {
 						}
 					}
 				}
-			catch (IOException exc){exc.printStackTrace();}
+			catch (IOException exc){System.err.println("Error. Connection closed.");}
 			finally {
 				try {
 					socket.close();
+					//TODO: Close stuff?
 				} catch (IOException exc) {}
 			}
 		}
 	}
+
+	
 
 	
 

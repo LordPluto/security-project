@@ -6,6 +6,8 @@ import java.net.Socket;
 
 import javax.net.ssl.SSLServerSocketFactory;
 
+import Database.DatabaseAccountRepository;
+import Database.IAccountRepository;
 import Listeners.CasinoViewListener;
 import Proxies.CasinoViewProxy;
 
@@ -22,6 +24,7 @@ public class Server {
 		
 		String host = "localhost"; //TODO: Input 
 		int port = 5009; //TODO: Port
+		AccountRepositoryInstance = DatabaseAccountRepository.getInstance();
 		
 		//ServerSocket serversocket = new ServerSocket();
 		ServerSocket serversocket = SSLServerSocketFactory.getDefault().createServerSocket();
@@ -33,10 +36,12 @@ public class Server {
 		for (;;) {	
 				Socket socket = serversocket.accept();
 				CasinoViewProxy proxy = new CasinoViewProxy (socket);
-				proxy.setViewListener ((CasinoViewListener)manager);
+				proxy.setCasinoViewListener ((CasinoViewListener)manager);
 		}
 		
 	}
+	
+	public static IAccountRepository AccountRepositoryInstance;
 	
 		
 

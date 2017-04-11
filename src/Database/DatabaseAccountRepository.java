@@ -10,7 +10,7 @@ public class DatabaseAccountRepository implements IAccountRepository {
 	private static String DBName = "SecurityProject";
 	private static String Driver = "com.mysql.jdbc.Driver";
 	private static String Username = "root";
-	private static String Password = "swordfish";
+	private static String Password = "";
 	private static String Host = "127.0.0.1";
 	
 	private Hashtable<String,PreparedStatement> pstatements = new Hashtable<String,PreparedStatement>();

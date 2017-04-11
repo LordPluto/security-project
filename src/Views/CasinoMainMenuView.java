@@ -9,7 +9,9 @@ import javax.swing.*;
 
 import Listeners.CasinoModelListener;
 import Listeners.CasinoViewListener;
+import Listeners.GameViewListener;
 import Models.CasinoModelClone;
+import Proxies.CasinoModelProxy;
 
 public class CasinoMainMenuView implements CasinoModelListener {
     final static boolean shouldFill = true;
@@ -96,9 +98,41 @@ public class CasinoMainMenuView implements CasinoModelListener {
 	public static void actionlobbyList(){
 		joinPublicGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
-					//lobbyList.main(null);
+				double f = getFundsToTable();
+				if (f != 0){
+					try {
+						listener.joinGame(0, f, "", modelClone.initGame());
+					} catch (IOException e) {
+						JOptionPane.showMessageDialog(null, "Unable to join game.");
+					}
+				}
 			}
+				
 		});
+	}
+	
+	private static double getFundsToTable() {
+		String s = (String)JOptionPane.showInputDialog(
+                frame,
+                "How much are you bringing to the table.",
+                "Join Game",
+                JOptionPane.PLAIN_MESSAGE);
+		if (s != null) {
+			
+			try {
+				double f = Double.parseDouble(s);
+				f = Math.floor(f * 100) / 100; //Truncate to 2 decimal places
+				if (modelClone.getAvailableFunds() < f) {
+					JOptionPane.showMessageDialog(null, "Invalid amount of funds entered.");
+				} else {
+					return f;
+				}
+			} catch(NumberFormatException e) {
+				JOptionPane.showMessageDialog(null, "Invalid amount of funds entered.");
+			}
+		}
+		return 0;
+	
 	}
 	
 	private static void setBalance() {
@@ -158,6 +192,19 @@ public class CasinoMainMenuView implements CasinoModelListener {
 	@Override
 	public void loginSuccessfulForAccount(String name) throws IOException {
 		return;
+	}
+
+
+	@Override
+	public void joinGameFailed(String reason) throws IOException {
+		JOptionPane.showMessageDialog(null, "Unable to join game: " + reason);
+	}
+
+
+	@Override
+	public void joinGameSuccess(CasinoModelProxy session) throws IOException {
+		// Think we're OK doing nothing here. Model will act as the controller and setup the game session.
+		//TODO: Disable buttons?
 		
 	}
 }

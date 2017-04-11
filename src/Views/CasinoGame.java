@@ -1,4 +1,5 @@
 package Views;
+
 import java.awt.ComponentOrientation;
 import java.awt.Container;
 import java.awt.GridBagConstraints;
@@ -6,6 +7,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -16,18 +18,18 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import Listeners.CasinoViewListener;
+//import Models.CasinoGameClone;
 
+public class CasinoGame implements CasinoGameModel{
 
-public class mainMenu1 implements ActionListener {
-
-	
     final static boolean shouldFill = true;
     final static boolean shouldWeightX = true;
     final static boolean RIGHT_TO_LEFT = false;
 
     static JFrame frame;
 //    static CasinoGameClone modelClone;
-    static CasinoViewListener listener;
+//  static CasinoGameClone modelClone;
+  static CasinoViewListener listener;
 	static JButton bet = new JButton("Bet");
 	static JButton quit = new JButton("Quit");
 	
@@ -37,16 +39,16 @@ public class mainMenu1 implements ActionListener {
 	static JTextField BET = new JTextField(15);
 	//dropdown for heads/tails
 	
-	public static void main(String[] args){
-		createAndShowGUI();
-	}
+	//public static void main(String[] args){
+	//	createAndShowGUI(clone);
+	//}
 
-    public static void addComponentsToPane(Container pane) {
-        if (RIGHT_TO_LEFT) {
-            pane.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-        }
+  public static void addComponentsToPane(Container pane) {
+      if (RIGHT_TO_LEFT) {
+          pane.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+      }
 
-        //JButton button;
+      //JButton button;
 		pane.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		if (shouldFill) {
@@ -58,7 +60,7 @@ public class mainMenu1 implements ActionListener {
 		JLabel usrBet  = new JLabel();
 		
 		//User Entered Bet 0
-		//setBalance here for opponent user
+		//setBalance here for opponent user *************
 		usrInfo  = new JLabel("User 0 "+"Balance: $" + 50);
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.insets = new Insets(10,10,0,0);
@@ -158,18 +160,15 @@ public class mainMenu1 implements ActionListener {
 		c.gridy = 8;
 		pane.add(usrInfo, c);
 		
-
-        c.fill = GridBagConstraints.BOTH;
+		//List showing heads and tails option
+      c.fill = GridBagConstraints.BOTH;
 		c.insets = new Insets(0,0,0,0);
-        c.weightx = 0.5;
-        c.weighty = 0.5;
+      c.weightx = 0.5;
+      c.weighty = 0.5;
 		c.gridx = 1;
 		c.gridy = 8;
-        pane.add(fliplist(),c);
-
-    
-
-		
+      pane.add(fliplist(),c);
+      
 		
 		//Bet: label
 		usrInfo  = new JLabel("Bet: ");
@@ -210,47 +209,54 @@ public class mainMenu1 implements ActionListener {
 		
 		
 	}
+  
+  /**
+   * Creates a JList
+   * @return A JList with two strings; Heads and Tails, and its JScrollPane
+   */
+  private static JScrollPane fliplist(){
+      DefaultListModel<String> listModel = new DefaultListModel<String>();  
+      JList<String> list = new JList<String>(listModel);
+
+      
+
+      listModel.addElement("Heads");
+      listModel.addElement("Tails");
+      
+      // Set the item width
+      int cellWidth = 10;
+      list.setFixedCellWidth(cellWidth);
+
+      // Set the item height
+      int cellHeight = 12;
+      list.setFixedCellHeight(cellHeight);
+      
+      JScrollPane pane = new JScrollPane(list);
+      return pane;
+  }
 
     
 
+	
+	private static void setBalance() {
+		if (modelClone != null) {
+			String text = "Available balance: $" + modelClone.getAvailableFunds();
+			balance.setText(text);
+		}
+	}
 
 	public static void setViewListener(CasinoViewListener theListener) {
 		listener = theListener;
 	}
-	
-    /**
-     * Creates a JList
-     * @return A JList with two strings; Heads and Tails, and its JScrollPane
-     */
-    private static JScrollPane fliplist(){
-        DefaultListModel<String> listModel = new DefaultListModel<String>();  
-        JList<String> list = new JList<String>(listModel);
-
-        
-
-        listModel.addElement("Heads");
-        listModel.addElement("Tails");
-        
-        // Set the item width
-        int cellWidth = 10;
-        list.setFixedCellWidth(cellWidth);
-
-        // Set the item height
-        int cellHeight = 12;
-        list.setFixedCellHeight(cellHeight);
-        
-        JScrollPane pane = new JScrollPane(list);
-        return pane;
-    }
     
     /**
      * Create the GUI and show it.  For thread safety,
      * this method should be invoked from the
      * event-dispatching thread.
      */
-    public static void createAndShowGUI() {
+    public static void createAndShowGUI(CasinoModelClone clone) {
     	
-    	
+    	modelClone = clone;
     	//Schedule a job for the event-dispatching thread:
         //creating and showing this application's GUI.
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
@@ -270,12 +276,6 @@ public class mainMenu1 implements ActionListener {
         });
     
     }
-
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
 
 
 }

@@ -60,15 +60,15 @@ public class CasinoModelClone implements CasinoModelListener {
 
 	@Override
 	public  void joinGameSuccess(CasinoModelProxy gameSession) throws IOException {
-		TestGameView.createAndShowGUI(gameClone);
-		TestGameView.setViewListener(gameSession);
+		GameView.createAndShowGUI(gameClone);
+		GameView.setViewListener(gameSession);
 		modelListener.joinGameSuccess(null);
 		
 	}
 	
 	public GameModelListener initGame() {
-		gameClone = new GameModelClone(4, loggedInUser);
-		gameClone.setGameModelListener(new TestGameView());
+		gameClone = new GameModelClone(5, loggedInUser);
+		gameClone.setGameModelListener(new GameView());
 		return gameClone;
 	}
 

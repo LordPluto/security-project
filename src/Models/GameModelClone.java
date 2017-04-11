@@ -13,7 +13,15 @@ public class GameModelClone implements GameModelListener {
 	private String localPlayerName;
 	private int numOpponents;
 	
-	private int mySeat = -1;
+	
+	private int getNextAvailableUISeat() {
+		for (int i = 1; i< 5; i++) {
+			if (!uiSeatToGameSeatMap.containsKey(i)){
+				return i;
+			}
+		}
+		return -1;
+	}
 	
 	public void setGameModelListener(GameModelListener theListener) {
 		this.listener = theListener;
@@ -84,8 +92,9 @@ public class GameModelClone implements GameModelListener {
 			uiSeatToGameSeatMap.put(0, seat);
 			p.UISeat = 0;
 		} else {
-			uiSeatToGameSeatMap.put(1+numOpponents, seat);
-			p.UISeat = 1+numOpponents;
+			int newUISeat = getNextAvailableUISeat();
+			uiSeatToGameSeatMap.put(newUISeat, seat);
+			p.UISeat = newUISeat;
 			//TODO: Find next available the right way.
 			numOpponents++;
 			

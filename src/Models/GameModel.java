@@ -17,7 +17,7 @@ public class GameModel implements GameViewListener {
 	
 	
 	
-	private static final int DEFAULT_CAPACITY = 4;
+	private static final int DEFAULT_CAPACITY = 5;
 	private static final int TURN_LENGTH = 10;
 	
 	private int playerCapacity = DEFAULT_CAPACITY;

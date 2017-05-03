@@ -1,6 +1,6 @@
 package Database;
 
-
+//Don't use this class
 public class FileAccountRepository implements IAccountRepository {
 	
 	private static FileAccountRepository instance;
@@ -44,5 +44,17 @@ public class FileAccountRepository implements IAccountRepository {
 	public void setFundsAvailable(String username, double balance) {
 		//TODO: Implement
 		
+	}
+
+	@Override
+	public void setFundsPassword(String username, String hash) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getFundsPassword(String username) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

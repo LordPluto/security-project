@@ -44,4 +44,18 @@ public interface IAccountRepository {
 	 * @param balance
 	 */
 	public void setFundsAvailable(String username, double balance);
+	
+	/**
+	 * Set the password to access the user's funds.
+	 * @param username
+	 * @param hash
+	 */
+	public void setFundsPassword(String username, String hash);
+	
+	/**
+	 * Gets the password to access the user's funds.
+	 * @param username
+	 * @return
+	 */
+	public String getFundsPassword(String username);
 }

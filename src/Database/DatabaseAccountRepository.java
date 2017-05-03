@@ -5,13 +5,13 @@ import java.util.Hashtable;
 
 public class DatabaseAccountRepository implements IAccountRepository {
 	
-	private static String URL = "jdbc:mysql://";
-	private static String Port = "3306";
-	private static String DBName = "SecurityProject";
-	private static String Driver = "com.mysql.jdbc.Driver";
-	private static String Username = "root";
-	private static String Password = "";
-	private static String Host = "127.0.0.1";
+	private static final String URL = "jdbc:mysql://";
+	private static final String Port = "3306";
+	private static final String DBName = "SecurityProject";
+	private static final String Driver = "com.mysql.jdbc.Driver";
+	private static final String Username = "root";
+	private static final String Password = "swordfish";
+	private static final String Host = "127.0.0.1";
 	
 	private Hashtable<String,PreparedStatement> pstatements = new Hashtable<String,PreparedStatement>();
 	private static int UserId = -1;
@@ -290,6 +290,51 @@ public class DatabaseAccountRepository implements IAccountRepository {
 		}
 		
 		while(!close()) {}
+	}
+	
+	@Override
+	public synchronized void setFundsPassword(String username, String hash) {
+		if(!connect()) {
+			return;
+		}
+		
+		try{			
+			String query = "UPDATE UserFund join UserPass on UserPass.id = UserFund.client_id set client_password = ? WHERE username = ?;";			
+			ArrayList<String> queryParams = new ArrayList<String>();
+			queryParams.add(username);
+			queryParams.add(hash);
+			
+			startTrans();
+			setData(query, queryParams);
+			UserId = -1;
+			endTrans();
+		} catch (Exception e) {
+		}
+		
+		while(!close()) {}
+	}
+	
+	@Override
+	public synchronized String getFundsPassword(String username) {
+		String retVal = "";
+		if(!connect()) {
+			return retVal;
+		}
+		
+		try {
+			String query = "SELECT client_password FROM UserPass join UserFund on UserPass.id = UserFund.client_id WHERE username = ?;";
+			ArrayList<String> queryParams = new ArrayList<String>();
+			queryParams.add(username);
+			
+			startTrans();
+			ArrayList<ArrayList<String>> results = getData(query, queryParams);
+			
+			retVal = results.get(1).get(0);
+		} catch (Exception e) {
+		}
+		
+		while(!close()) {}
+		return retVal;
 	}
 	
 	private boolean connect() {
